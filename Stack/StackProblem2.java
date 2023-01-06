@@ -29,6 +29,7 @@ public class StackProblem2 {
         stack.push(2);
         stack.push(3);
 
+        reverse(stack);
         while(!stack.isEmpty()) {
             System.out.println(stack.pop());
         }
