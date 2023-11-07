@@ -1,0 +1,71 @@
+/doc/html/
+/doc/doxygen.log
+/build/
+
+__pycache__/
+dist/
+env/
+include/yaramod/types/modules/generated/*.h
+*.egg-info/
+import json
+import getopt
+import os
+import sys
+
+
+def escapeAndQuoteCharacter(c):
+    if c == "\"":
+        return "'\\\"', "
+    elif c == "\'":
+        return"'\\'', "
+    elif c == "\n":
+        return"'\\n', "
+    elif c == "\t":
+        return"'\\t', "
+    elif c == "\\":
+        return"'\\\\', "
+    else:
+        return"\'" + c + "\', "
+    
+for file in os.listdir(input_directory):
+        filename, extension = os.path.splitext(file)
+        if extension != ".json":
+            continue
+        source_path = os.path.join(input_directory, file)
+        output_file = os.path.join(output_directory, filename + "_generated.h")
+
+        with open(source_path, "r") as f:
+            data = json.load(f)
+        if "name" not in data:
+            continue
+        name = data["name"]
+        module_names.append(filename)
+
+        with open(source_path, "r") as f:
+            module_content = f.read()
+
+        with open(output_file, "w") as f:
+            f.write('''/**
+
+def main(argv):
+    input_directory = ""
+    output_directory = ""
+    try:
+        opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
+    except getopt.GetoptError:
+        print("ERROR: Bad arguments for json_to_array.py: -i <input_directory> -o <output_directory>")
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt == "-h":
+            print("json_to_array.py -i <input_directory> -o <output_directory>")
+            sys.exit()
+        elif opt in ("-i", "--ifile"):
+            input_directory = arg
+        elif opt in ("-o", "--ofile"):
+            output_directory = arg
+
+    if not input_directory or not output_directory:
+        print("ERROR: Bad arguments for json_to_array.py: Both <input_directory> and <output_directory> must be specified.")
+        sys.exit(2)
+        
