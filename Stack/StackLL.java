@@ -1,5 +1,4 @@
-//stack using Linked List
-public class StackDS {
+public class StackLL {
     private static class Node {
         int data;
         Node next;
@@ -11,24 +10,25 @@ public class StackDS {
     }
 
     static class Stack {
-        public static Node head = null;
-        public static void push(int data) {
+        private Node head; // Removed 'public static' from head
+
+        public void push(int data) {
             Node newNode = new Node(data);
 
-            if(head == null) {
+            if (head == null) {
                 head = newNode;
-                return;
+            } else {
+                newNode.next = head;
+                head = newNode;
             }
-            newNode.next = head;
-            head = newNode;
         }
 
-        public static boolean isEmpty() {
+        public boolean isEmpty() {
             return head == null;
         }
 
-        public static int pop() {
-            if(isEmpty()) {
+        public int pop() {
+            if (isEmpty()) {
                 return -1;
             }
             Node top = head;
@@ -36,12 +36,11 @@ public class StackDS {
             return top.data;
         }
 
-        public static int peek() {
-            if(isEmpty()) {
+        public int peek() {
+            if (isEmpty()) {
                 return -1;
             }
-            Node top = head;
-            return top.data;
+            return head.data;
         }
     }
 
@@ -52,7 +51,7 @@ public class StackDS {
         stack.push(3);
         stack.push(4);
 
-        while(!stack.isEmpty()) {
+        while (!stack.isEmpty()) {
             System.out.println(stack.peek());
             stack.pop();
         }
