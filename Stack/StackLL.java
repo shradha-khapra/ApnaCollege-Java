@@ -1,5 +1,5 @@
 //stack using Linked List
-public class StackDS {
+public class StackLL {
     private static class Node {
         int data;
         Node next;
